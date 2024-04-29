@@ -8,7 +8,7 @@
 
     <item>
 
-            <bitmap android:src="@mipmap/vpsplash"></bitmap>
+            <bitmap android:src="@mipmap/vpsplash" android:gravity="center"></bitmap>
 
     </item>
 </layer-list>
