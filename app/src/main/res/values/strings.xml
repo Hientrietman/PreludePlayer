@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PreludePlayer</string>
+    <string name="greeting">Welcome to PreludePlayer</string>
+    <string name="greeting2">This app need permissions to run correctly</string>
 </resources>
