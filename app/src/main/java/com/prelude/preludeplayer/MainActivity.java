@@ -3,6 +3,7 @@ package com.prelude.preludeplayer;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.content.Intent;
@@ -23,14 +24,22 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> allFolderList = new ArrayList<>();
     RecyclerView recyclerView;
     VideoFoldersAdapter adapter;
-
+    SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.folders_rv);
+        swipeRefreshLayout =findViewById(R.id.swipe_refresh_folders);
         showFolders();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                showFolders();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void showFolders() {
