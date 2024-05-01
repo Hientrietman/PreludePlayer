@@ -1,19 +1,21 @@
 package com.prelude.preludeplayer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.Manifest;
+
 import android.content.Intent;
-import android.content.pm.PackageManager;
+
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
-import android.util.Log;
+import com.prelude.preludeplayer.R;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 
@@ -25,13 +27,14 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     VideoFoldersAdapter adapter;
     SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.folders_rv);
-        swipeRefreshLayout =findViewById(R.id.swipe_refresh_folders);
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_folders);
         showFolders();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    public ArrayList<MediaFiles> fetchMedia(){
+    public ArrayList<MediaFiles> fetchMedia() {
         ArrayList<MediaFiles> mediaFilesArrayList = new ArrayList<>();
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
 
@@ -78,5 +81,42 @@ public class MainActivity extends AppCompatActivity {
             } while (cursor.moveToNext());
         }
         return mediaFilesArrayList;
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.folder_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id==R.id.rateus){
+                Uri uri = Uri.parse("https://play.google.com/store/apps/details?id="
+                        + getApplicationContext().getPackageName());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+
+        }
+          if(id== R.id.refresh_folders){
+              finish();
+              startActivity(getIntent());
+          }
+          if(id==R.id.share_app){
+
+                Intent share_intent = new Intent();
+                share_intent.setAction(Intent.ACTION_SEND);
+                share_intent.putExtra(Intent.EXTRA_TEXT,"Check this app via\n"+
+                        "https://play.google.com/store/apps/details?id="
+                        + getApplicationContext().getPackageName());
+                share_intent.setType("text/plain");
+                startActivity(Intent.createChooser(share_intent,"Share app via"));
+
+        }
+        return true;
     }
 }
+
