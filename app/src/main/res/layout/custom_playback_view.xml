@@ -47,6 +47,13 @@
 
         </LinearLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
         <RelativeLayout
             android:id="@+id/progress"
             android:layout_width="match_parent"
@@ -146,4 +153,15 @@
 
         </LinearLayout>
     </RelativeLayout>
+    <ImageView
+        android:id="@+id/lock"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_lock"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:scaleType="centerInside"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        android:background="@drawable/ripple_circle"/>
 </RelativeLayout>

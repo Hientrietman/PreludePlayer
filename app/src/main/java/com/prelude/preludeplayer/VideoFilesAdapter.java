@@ -8,6 +8,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -86,8 +87,13 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
                         editText.requestFocus();
 
                         alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @SuppressLint("NotifyDataSetChanged")
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                if(TextUtils.isEmpty(editText.getText().toString())){
+                                    Toast.makeText(context, "Can't rename empty file", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                                 String onlyPath = file.getParentFile().getAbsolutePath();
                                 String ext = file.getAbsolutePath();
                                 ext = ext.substring(ext.lastIndexOf("."));
@@ -160,7 +166,7 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
                                     notifyItemRangeChanged(position, videoList.size());
                                     Toast.makeText(context, "Video Deleted", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(context, "can't deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Can't deleted", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -175,6 +181,46 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
                     }
                 });
 
+                bsView.findViewById(R.id.bs_properties).setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                        alertDialog.setTitle("Properties");
+
+                        String one = "File: " + videoList.get(position).getDisplayName();
+                        String path = videoList.get(position).getPath();
+                        int indexOfPath = path.lastIndexOf("/");
+
+                        String two = "Path: " +path.substring(0, indexOfPath);
+
+                        String three = "Size: " + android.text.format.Formatter
+                                .formatFileSize(context, Long.parseLong(videoList.get(position).getSize()));
+
+                        String four = "Length: " + timeConversion((long) milliSeconds);
+                        String namewithFormat = videoList.get(position).getDisplayName();
+                        int index = namewithFormat.lastIndexOf(".");
+                        String format = namewithFormat.substring(index + 1);
+
+                        String five = "Format: " + format;
+                        MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
+                        metadataRetriever.setDataSource(videoList.get(position).getPath());
+                        String height = metadataRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
+                        String width = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
+
+                        String six = "Resolution: " + width + "x" + height;
+
+                        alertDialog.setMessage(one + "\n\n" + two + "\n\n" + three + "\n\n" + four +
+                                "\n\n" + five + "\n\n" + six);
+                        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int witch) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alertDialog.show();
+                        bottomSheetDialog.dismiss();
+                    }
+                });
 
                 bottomSheetDialog.setContentView(bsView);
                 bottomSheetDialog.show();
@@ -225,5 +271,10 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
             videoTime=String.format("%02d:%02d",mns,scs);
         }
         return videoTime;
+    }
+    void updateVideoFiles(ArrayList<MediaFiles> files){
+        videoList = new ArrayList<>();
+        videoList.addAll(files);
+        notifyDataSetChanged();
     }
 }

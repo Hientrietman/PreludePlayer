@@ -7,10 +7,14 @@
     android:background="@android:color/white"
     tools:context=".VideoFilesActivity">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/videos_rv"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="match_parent"
+            android:id="@+id/swipe_refresh_videos">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/videos_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

@@ -95,25 +95,25 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if(id==R.id.rateus){
-                Uri uri = Uri.parse("https://play.google.com/store/apps/details?id="
-                        + getApplicationContext().getPackageName());
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
+            Uri uri = Uri.parse("https://play.google.com/store/apps/details?id="
+                    + getApplicationContext().getPackageName());
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
 
         }
-          if(id== R.id.refresh_folders){
-              finish();
-              startActivity(getIntent());
-          }
-          if(id==R.id.share_app){
+        if(id== R.id.refresh_folders){
+            finish();
+            startActivity(getIntent());
+        }
+        if(id==R.id.share_app){
 
-                Intent share_intent = new Intent();
-                share_intent.setAction(Intent.ACTION_SEND);
-                share_intent.putExtra(Intent.EXTRA_TEXT,"Check this app via\n"+
-                        "https://play.google.com/store/apps/details?id="
-                        + getApplicationContext().getPackageName());
-                share_intent.setType("text/plain");
-                startActivity(Intent.createChooser(share_intent,"Share app via"));
+            Intent share_intent = new Intent();
+            share_intent.setAction(Intent.ACTION_SEND);
+            share_intent.putExtra(Intent.EXTRA_TEXT,"Check this app via\n"+
+                    "https://play.google.com/store/apps/details?id="
+                    + getApplicationContext().getPackageName());
+            share_intent.setType("text/plain");
+            startActivity(Intent.createChooser(share_intent,"Share app via"));
 
         }
         return true;
