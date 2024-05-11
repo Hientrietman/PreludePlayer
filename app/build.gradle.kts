@@ -46,4 +46,6 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("io.github.tutorialsandroid:filepicker:9.2.5")
+    //Equalizer
+    implementation ("com.github.bullheadandplato:AndroidEqualizer:2.2")
 }
