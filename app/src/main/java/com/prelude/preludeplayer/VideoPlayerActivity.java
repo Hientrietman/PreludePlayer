@@ -28,17 +28,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.developer.filepicker.controller.DialogSelectionListener;
+import com.developer.filepicker.model.DialogConfigs;
+import com.developer.filepicker.model.DialogProperties;
+import com.developer.filepicker.view.FilePickerDialog;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.source.SingleSampleMediaSource;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
@@ -73,9 +81,9 @@ public class  VideoPlayerActivity extends AppCompatActivity implements View.OnCl
     boolean mute = false;
     PlaybackParameters parameters;
     float speed;
-    //DialogProperties dialogProperties;
-    //FilePickerDialog filePickerDialog;
-    //Uri uriSubtile;
+    DialogProperties dialogProperties;
+    FilePickerDialog filePickerDialog;
+    Uri uriSubtile;
     PictureInPictureParams.Builder pictureInPicture;
     boolean isCrossChecked;
 
@@ -92,7 +100,7 @@ public class  VideoPlayerActivity extends AppCompatActivity implements View.OnCl
         position = getIntent().getIntExtra("position", 1);
         videoTitle = getIntent().getStringExtra("video_title");
         mVideoFiles = getIntent().getExtras().getParcelableArrayList("videoArrayList");
-        screenOrientation();
+        //screenOrientation();
 
         nextButton = findViewById(R.id.exo_next);
         previousButton = findViewById(R.id.exo_prev);
@@ -115,11 +123,12 @@ public class  VideoPlayerActivity extends AppCompatActivity implements View.OnCl
         videoList.setOnClickListener(this);
         scaling.setOnClickListener(firstListener);
 
-        //dialogProperties = new DialogProperties();
-        //filePickerDialog = new FilePickerDialog(VideoPlayerActivity.this);
-        //filePickerDialog.setTitle("Select a Subtitle File");
-        //filePickerDialog.setPositiveBtnName("OK");
-        //filePickerDialog.setPositiveBtnName("Cancel");
+        dialogProperties = new DialogProperties();
+        filePickerDialog = new FilePickerDialog(VideoPlayerActivity.this);
+        filePickerDialog.setTitle("Select a Subtitle File");
+        filePickerDialog.setPositiveBtnName("OK");
+        filePickerDialog.setPositiveBtnName("Cancel");
+
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
             pictureInPicture = new PictureInPictureParams.Builder();
         }
@@ -292,6 +301,24 @@ public class  VideoPlayerActivity extends AppCompatActivity implements View.OnCl
                 }
                 if(position == 9){
                     //subtitle
+                    dialogProperties.selection_mode = DialogConfigs.SINGLE_MODE;
+                    dialogProperties.extensions = new String[]{".srt"};
+                    dialogProperties.root = new File("/storage/emulated/0");
+                    filePickerDialog.setProperties(dialogProperties);
+                    filePickerDialog.show();
+                    filePickerDialog.setDialogSelectionListener(new DialogSelectionListener() {
+                        @Override
+                        public void onSelectedFilePaths(String[] strings) {
+                            for (String path: strings){
+                                File file = new File(path);
+                                uriSubtile = Uri.parse(file.getAbsolutePath().toString());
+                            }
+                            playVideoSubtitle(uriSubtile);
+                        }
+
+                        private void playVideoSubtitle(Uri uriSubtile) {
+                        }
+                    });
                 }
 
             }
@@ -317,6 +344,33 @@ public class  VideoPlayerActivity extends AppCompatActivity implements View.OnCl
         player.setPlaybackParameters(parameters);
         player.prepare(concatenatingMediaSource);
         player.seekTo(position, C.TIME_UNSET);
+        playError();
+    }
+    private void playVideoSubtitle(Uri subtitle) {
+        long oldPosition = player.getCurrentPosition();
+        player.stop();
+
+        String path = mVideoFiles.get(position).getPath();
+        Uri uri = Uri.parse(path);
+        player = new SimpleExoPlayer.Builder(this).build();
+        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(
+                this, Util.getUserAgent(this, "app"));
+        concatenatingMediaSource = new ConcatenatingMediaSource();
+        for (int i = 0; i < mVideoFiles.size(); i++) {
+            new File(String.valueOf(mVideoFiles.get(i)));
+            MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(Uri.parse(String.valueOf(uri)));
+            Format textFormat = Format.createTextSampleFormat(null, MimeTypes.APPLICATION_SUBRIP,Format.NO_VALUE,"app");
+            MediaSource subtitleSource = new SingleSampleMediaSource.Factory(dataSourceFactory).setTreatLoadErrorsAsEndOfStream(true)
+                    .createMediaSource(Uri.parse(String.valueOf(subtitle)),textFormat,C.TIME_UNSET);
+            MergingMediaSource mergingMediaSource = new MergingMediaSource(mediaSource,subtitleSource);
+            concatenatingMediaSource.addMediaSource(mergingMediaSource);
+        }
+        playerView.setPlayer(player);
+        playerView.setKeepScreenOn(true);
+        player.setPlaybackParameters(parameters);
+        player.prepare(concatenatingMediaSource);
+        player.seekTo(position, oldPosition);
         playError();
     }
 
