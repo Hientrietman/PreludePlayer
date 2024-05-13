@@ -65,7 +65,8 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
-import com.prelude.preludeplayer.fragments.BrightnessDialog;
+import com.prelude.preludeplayer.BrightnessDialog;
+import com.prelude.preludeplayer.fragments.B;
 import com.prelude.preludeplayer.models.IconModel;
 import com.prelude.preludeplayer.models.MediaFiles;
 import com.prelude.preludeplayer.models.OnSwipeTouchListener;
@@ -892,7 +893,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, Configuration newConfig) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig);
+        }
         isCrossChecked = isInPictureInPictureMode;
         if (isInPictureInPictureMode) {
             playerView.hideController();

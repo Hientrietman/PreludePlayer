@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,21 +14,24 @@
         android:roundIcon="@mipmap/vpicon"
         android:supportsRtl="true"
         android:theme="@style/Theme.VideoPlayer">
-        <activity android:name=".activities.VideoPlayerActivity"
+
+        <activity
+            android:name=".activities.VideoPlayerActivity"
             android:configChanges="orientation|screenSize|layoutDirection|screenLayout|smallestScreenSize|keyboardHidden|uiMode"
             android:excludeFromRecents="true"
             android:exported="true"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
             tools:targetApi="n" />
-        <activity android:name=".activities.VideoFilesActivity"
-            android:parentActivityName=".activities.MainActivity"/>
+        <activity
+            android:name=".activities.VideoFilesActivity"
+            android:parentActivityName=".activities.MainActivity" />
         <activity android:name=".activities.AllowAccessActivity" />
         <activity android:name=".activities.MainActivity" />
         <activity
             android:name=".activities.SplashScreenActivity"
-            android:theme="@style/SplashTheme.VideoPlayer"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/SplashTheme.VideoPlayer">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
