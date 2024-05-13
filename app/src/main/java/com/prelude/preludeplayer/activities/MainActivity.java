@@ -1,4 +1,4 @@
-package com.prelude.preludeplayer;
+package com.prelude.preludeplayer.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +13,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+
+import com.prelude.preludeplayer.models.MediaFiles;
 import com.prelude.preludeplayer.R;
+import com.prelude.preludeplayer.adapters.VideoFoldersAdapter;
+
 import android.view.Menu;
 import android.view.MenuItem;
 

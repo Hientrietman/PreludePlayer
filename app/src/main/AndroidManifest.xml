@@ -4,44 +4,31 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS"
-        tools:ignore="ProtectedPermissions"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.WRITE_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/vpicon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/vpicon"
         android:supportsRtl="true"
-        android:theme="@style/Base.Theme.PreludePlayer"
-        tools:targetApi="31">
-        <activity
-            android:name=".VideoPlayerActivity"
+        android:theme="@style/Theme.VideoPlayer">
+        <activity android:name=".activities.VideoPlayerActivity"
             android:configChanges="orientation|screenSize|layoutDirection|screenLayout|smallestScreenSize|keyboardHidden|uiMode"
             android:excludeFromRecents="true"
             android:exported="true"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
-
-            />
+            tools:targetApi="n" />
+        <activity android:name=".activities.VideoFilesActivity"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.AllowAccessActivity" />
+        <activity android:name=".activities.MainActivity" />
         <activity
-            android:name=".VideoFilesActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity
-            android:name=".AllowAccessActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SplashScreenActivity"
-            android:exported="true"
-            android:theme="@style/SplashScreen.Theme.PreludePlayer">
+            android:name=".activities.SplashScreenActivity"
+            android:theme="@style/SplashTheme.VideoPlayer"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

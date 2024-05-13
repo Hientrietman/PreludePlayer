@@ -1,4 +1,4 @@
-package com.prelude.preludeplayer;
+package com.prelude.preludeplayer.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -15,6 +15,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import com.prelude.preludeplayer.R;
 
 //import com.prelude.videoplayer.R;
 

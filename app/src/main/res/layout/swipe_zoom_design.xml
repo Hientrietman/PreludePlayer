@@ -60,7 +60,7 @@
             android:textColor="@android:color/white"/>
 
     </LinearLayout>
-<!--    brightnessdesign-->
+    <!--    brightnessdesign-->
 
     <LinearLayout
         android:id="@+id/brt_progress_container"

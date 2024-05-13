@@ -1,4 +1,4 @@
-package com.prelude.preludeplayer;
+package com.prelude.preludeplayer.adapters;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.prelude.preludeplayer.models.IconModel;
+import com.prelude.preludeplayer.R;
 
 import java.util.ArrayList;
 

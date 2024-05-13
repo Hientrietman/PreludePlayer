@@ -1,4 +1,4 @@
-package com.prelude.preludeplayer;
+package com.prelude.preludeplayer.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -1,6 +1,6 @@
-package com.prelude.preludeplayer;
+package com.prelude.preludeplayer.fragments;
 
-import static com.prelude.preludeplayer.VideoFilesActivity.MY_PREF;
+import static com.prelude.preludeplayer.activities.VideoFilesActivity.MY_PREF;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -21,6 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.prelude.preludeplayer.models.MediaFiles;
+import com.prelude.preludeplayer.R;
+import com.prelude.preludeplayer.adapters.VideoFilesAdapter;
 
 import java.util.ArrayList;
 

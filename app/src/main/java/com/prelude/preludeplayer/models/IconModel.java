@@ -1,4 +1,4 @@
-package com.prelude.preludeplayer;
+package com.prelude.preludeplayer.models;
 
 public class IconModel {
     private int imageView;
