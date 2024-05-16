@@ -1,4 +1,4 @@
-package com.prelude.preludeplayer;
+package com.prelude.preludeplayer.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -28,6 +28,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.prelude.preludeplayer.R;
+import com.prelude.preludeplayer.activities.VideoPlayerActivity;
+import com.prelude.preludeplayer.models.MediaFiles;
+import com.prelude.preludeplayer.models.Utility;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,8 +40,7 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
     private ArrayList<MediaFiles> videoList;
     private Context context;
     BottomSheetDialog bottomSheetDialog;
-    private  int viewType ;
-
+    private int viewType;
 
     public VideoFilesAdapter(ArrayList<MediaFiles> videoList, Context context,int viewType) {
         this.videoList = videoList;
@@ -47,22 +50,25 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
 
     @NonNull
     @Override
-    public VideoFilesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.video_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull VideoFilesAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+
         holder.videoName.setText(videoList.get(position).getDisplayName());
         String size = videoList.get(position).getSize();
         holder.videoSize.setText(android.text.format.Formatter.formatFileSize(context,
                 Long.parseLong(size)));
         double milliSeconds = Double.parseDouble(videoList.get(position).getDuration());
-        holder.videoDuration.setText(timeConversion((long) milliSeconds));
+        holder.videoDuration.setText(Utility.timeConversion((long) milliSeconds));
+
         Glide.with(context).load(new File(videoList.get(position).getPath()))
                 .into(holder.thumbnail);
-        if(viewType==0){
+
+        if (viewType == 0) {
             holder.menu_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -85,16 +91,15 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
                             String path = videoList.get(position).getPath();
                             final File file = new File(path);
                             String videoName = file.getName();
-                            videoName = videoName.substring(0,videoName.lastIndexOf("."));
+                            videoName = videoName.substring(0, videoName.lastIndexOf("."));
                             editText.setText(videoName);
                             alertDialog.setView(editText);
                             editText.requestFocus();
 
                             alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @SuppressLint("NotifyDataSetChanged")
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    if(TextUtils.isEmpty(editText.getText().toString())){
+                                    if (TextUtils.isEmpty(editText.getText().toString())) {
                                         Toast.makeText(context, "Can't rename empty file", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
@@ -104,37 +109,33 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
                                     String newPath = onlyPath + "/" + editText.getText().toString() + ext;
                                     File newFile = new File(newPath);
                                     boolean rename = file.renameTo(newFile);
-                                    if (rename)
-                                    {
+                                    if (rename) {
                                         ContentResolver resolver = context.getApplicationContext().getContentResolver();
                                         resolver.delete(MediaStore.Files.getContentUri("external"),
-                                                MediaStore.MediaColumns.DATA+"=?",new String[]
+                                                MediaStore.MediaColumns.DATA + "=?", new String[]
                                                         {file.getAbsolutePath()});
                                         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                                         intent.setData(Uri.fromFile(newFile));
                                         context.getApplicationContext().sendBroadcast(intent);
+
                                         notifyDataSetChanged();
                                         Toast.makeText(context, "Video Renamed", Toast.LENGTH_SHORT).show();
+
                                         SystemClock.sleep(200);
                                         ((Activity) context).recreate();
-
-                                    }
-                                    else {
+                                    } else {
                                         Toast.makeText(context, "Process Failed", Toast.LENGTH_SHORT).show();
                                     }
-
                                 }
                             });
                             alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-
                                 }
                             });
                             alertDialog.create().show();
                             bottomSheetDialog.dismiss();
-
                         }
                     });
 
@@ -149,6 +150,7 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
                             bottomSheetDialog.dismiss();
                         }
                     });
+
                     bsView.findViewById(R.id.bs_delete).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -170,7 +172,7 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
                                         notifyItemRangeChanged(position, videoList.size());
                                         Toast.makeText(context, "Video Deleted", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(context, "Can't deleted", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, "can't deleted", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -185,39 +187,40 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
                         }
                     });
 
-                    bsView.findViewById(R.id.bs_properties).setOnClickListener(new View.OnClickListener(){
+                    bsView.findViewById(R.id.bs_properties).setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v){
+                        public void onClick(View v) {
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                             alertDialog.setTitle("Properties");
 
                             String one = "File: " + videoList.get(position).getDisplayName();
+
                             String path = videoList.get(position).getPath();
                             int indexOfPath = path.lastIndexOf("/");
-
-                            String two = "Path: " +path.substring(0, indexOfPath);
+                            String two = "Path: " + path.substring(0, indexOfPath);
 
                             String three = "Size: " + android.text.format.Formatter
                                     .formatFileSize(context, Long.parseLong(videoList.get(position).getSize()));
 
-                            String four = "Length: " + timeConversion((long) milliSeconds);
+                            String four = "Length: " + Utility.timeConversion((long) milliSeconds);
+
                             String namewithFormat = videoList.get(position).getDisplayName();
                             int index = namewithFormat.lastIndexOf(".");
                             String format = namewithFormat.substring(index + 1);
 
                             String five = "Format: " + format;
+
                             MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
                             metadataRetriever.setDataSource(videoList.get(position).getPath());
-                            String height = metadataRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
+                            String height = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
                             String width = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
-
                             String six = "Resolution: " + width + "x" + height;
 
                             alertDialog.setMessage(one + "\n\n" + two + "\n\n" + three + "\n\n" + four +
                                     "\n\n" + five + "\n\n" + six);
                             alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int witch) {
+                                public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
                                 }
                             });
@@ -231,25 +234,25 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
 
                 }
             });
-
-        }else{
+        } else {
             holder.menu_more.setVisibility(View.GONE);
             holder.videoName.setTextColor(Color.WHITE);
             holder.videoSize.setTextColor(Color.WHITE);
         }
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, VideoPlayerActivity.class);
                 intent.putExtra("position",position);
-                intent.putExtra("video_title",videoList.get(position).getDisplayName());
+                intent.putExtra("video_title", videoList.get(position).getDisplayName());
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("videoArrayList",videoList);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
-                if (viewType==1){
-                    ((Activity)context).finish();
+                if (viewType == 1) {
+                    ((Activity) context).finish();
                 }
             }
         });
@@ -272,21 +275,8 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
             videoDuration = itemView.findViewById(R.id.video_duration);
         }
     }
-    public String timeConversion(Long value){
-        String videoTime;
-        int duration = Math.toIntExact(value);
-        int hrs =(duration/3600000);
-        int mns =(duration/60000)%60000;
-        int scs =duration%60000/1000;
-        if(hrs>0){
-            videoTime=String.format("%02d:%02d:%02d",hrs,mns,scs);
 
-        }else {
-            videoTime=String.format("%02d:%02d",mns,scs);
-        }
-        return videoTime;
-    }
-    void updateVideoFiles(ArrayList<MediaFiles> files){
+    public void  updateVideoFiles(ArrayList<MediaFiles> files) {
         videoList = new ArrayList<>();
         videoList.addAll(files);
         notifyDataSetChanged();

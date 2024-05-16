@@ -1,6 +1,5 @@
-package com.prelude.preludeplayer;
+package com.prelude.preludeplayer.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,13 +9,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.health.connect.datatypes.units.Length;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
+
+import com.prelude.preludeplayer.models.MediaFiles;
+import com.prelude.preludeplayer.R;
+import com.prelude.preludeplayer.adapters.VideoFilesAdapter;
 
 import java.util.ArrayList;
 

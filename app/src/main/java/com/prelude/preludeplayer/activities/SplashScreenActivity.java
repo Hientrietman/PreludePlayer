@@ -1,10 +1,12 @@
-package com.prelude.preludeplayer;
+package com.prelude.preludeplayer.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.prelude.preludeplayer.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

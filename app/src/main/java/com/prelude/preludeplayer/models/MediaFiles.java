@@ -1,4 +1,4 @@
-package com.prelude.preludeplayer;
+package com.prelude.preludeplayer.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

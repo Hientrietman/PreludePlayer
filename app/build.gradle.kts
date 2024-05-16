@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.prelude.preludeplayer"
-        minSdk = 23
+        minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -41,9 +41,13 @@ dependencies {
     implementation("com.google.android.exoplayer:exoplayer:2.14.1")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation("androidx.activity:activity:1.8.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation ("io.github.tutorialsandroid:filepicker:9.2.5")
+    implementation ("com.github.TutorialsAndroid:FilePicker:v8.0.19")
+
+    //Equalizer
+    implementation ("com.github.bullheadandplato:AndroidEqualizer:2.2")
 }

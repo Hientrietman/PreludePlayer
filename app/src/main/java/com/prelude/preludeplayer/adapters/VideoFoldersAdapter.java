@@ -1,4 +1,4 @@
-package com.prelude.preludeplayer;
+package com.prelude.preludeplayer.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.prelude.preludeplayer.models.MediaFiles;
+import com.prelude.preludeplayer.R;
+import com.prelude.preludeplayer.activities.VideoFilesActivity;
 
 import java.util.ArrayList;
 
